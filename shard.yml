@@ -1,0 +1,14 @@
+name: spectrum
+version: 0.1.0
+
+authors:
+  - Tom Elliot <telliot16@gmail.com>
+
+crystal: 0.29.0
+
+dependencies:
+  syringe:
+    github: bonemind/syringe
+    brach: master
+
+license: MIT
