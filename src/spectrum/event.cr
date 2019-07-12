@@ -1,4 +1,4 @@
 module Spectrum
-    module Event
-    end
+  module Event
+  end
 end

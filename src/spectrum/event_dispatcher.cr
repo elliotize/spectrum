@@ -1,7 +1,7 @@
 module Spectrum
   class EventDispatcher
-    def self.dispatch_event(event : Event)
-      listeners = EventListeners.new
+    def dispatch_event(event : Event)
+      listeners = EventHandlers.new
       listeners.on_event(event)
     end
   end

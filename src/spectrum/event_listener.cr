@@ -1,5 +1,5 @@
 module Spectrum
-  module EventListener
+  module EventHandler
     def on_event(event : Event)
       # This is just a hook that is overloaded
     end

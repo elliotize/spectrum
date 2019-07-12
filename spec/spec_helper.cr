@@ -14,7 +14,7 @@ class FooBarTwoEvent
 end
 
 class FooBarOneEventHandler
-  include Spectrum::EventListener
+  include Spectrum::EventHandler
   Syringe.injectable
 
   def self.last_event=(event : FooBarOneEvent)
@@ -31,7 +31,7 @@ class FooBarOneEventHandler
 end
 
 class FooBarTwoEventHandler
-  include Spectrum::EventListener
+  include Spectrum::EventHandler
   Syringe.injectable
 
   def self.last_event=(event : FooBarTwoEvent)
@@ -48,7 +48,7 @@ class FooBarTwoEventHandler
 end
 
 class FooBarBothEventHandler
-  include Spectrum::EventListener
+  include Spectrum::EventHandler
   Syringe.injectable
 
   def self.last_event=(event : Spectrum::Event)

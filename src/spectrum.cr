@@ -1,4 +1,7 @@
 require "./spectrum/*"
 module Spectrum
-  VERSION = "0.1.0"
+  def self.dispatch_event(event : Event)
+    dispatcher = EventDispatcher.new
+    dispatcher.dispatch_event(event)
+  end
 end

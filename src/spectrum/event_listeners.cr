@@ -1,9 +1,9 @@
 require "syringe"
 module Spectrum
-  class EventListeners
+  class EventHandlers
     include Syringe
 
-    def initialize(@listeners : Array(EventListener))
+    def initialize(@listeners : Array(EventHandler))
     end
 
     def on_event(event : Event)

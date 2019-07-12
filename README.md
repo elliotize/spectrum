@@ -18,6 +18,54 @@ A simple event framework using [syringe DI](https://github.com/Bonemind/syringe)
 
 ```crystal
 require "spectrum"
+
+class FooBarOneEvent
+  include Spectrum::Event
+  def initialize(@id : Int32)
+  end
+end
+
+class FooBarTwoEvent
+  include Spectrum::Event
+  def initialize(@id : Int32)
+  end
+end
+
+class FooBarOneEventHandler
+  include Spectrum::EventHandler
+  Syringe.injectable
+
+  def on_event(event : FooBarOneEvent)
+    # Do something
+  end
+end
+
+class FooBarTwoEventHandler
+  include Spectrum::EventHandler
+  Syringe.injectable
+
+  def on_event(event : FooBarTwoEvent)
+    # Do something
+  end
+end
+
+class FooBarBothEventHandler
+  include Spectrum::EventHandler
+  Syringe.injectable
+
+  def on_event(event : FooBarOneEvent)
+    # Do something
+  end
+
+  def on_event(event : FooBarTwoEvent)
+    # Do something
+  end
+end
+
+event_one = FooBarOneEvent.new(id: 1)
+Spectrum.dispatch_event(event_one)
+event_two = FooBarTwoEvent.new(id: 2)
+Spectrum.dispatch_event(event_two)
 ```
 
 
