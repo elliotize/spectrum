@@ -1,6 +1,6 @@
 # Spectrum
 Travis
-[![Status](https://api.travis-ci.com/elliotize/spectrum.svg?branch=master)](https://travis-ci.org/elliotize/spectrum)  
+[![Status](https://api.travis-ci.com/elliotize/spectrum.svg?branch=master)](https://travis-ci.com/elliotize/spectrum/)  
 
 A simple event framework using [syringe DI](https://github.com/Bonemind/syringe).
 
