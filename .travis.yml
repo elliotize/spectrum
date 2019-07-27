@@ -1,3 +1,6 @@
+dist: xenial
 language: crystal
-  - crystal spec
-  - crystal tool format --check
+crystal:
+  - latest
+  - nightly
+
