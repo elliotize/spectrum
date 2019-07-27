@@ -68,11 +68,6 @@ event_two = FooBarTwoEvent.new(id: 2)
 Spectrum.dispatch_event(event_two)
 ```
 
-
-## Development
-
-TODO: Write development instructions here
-
 ## Contributing
 
 1. Fork it (<https://github.com/elliotize/spectrum/fork>)
