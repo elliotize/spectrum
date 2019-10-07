@@ -2,13 +2,14 @@ require "syringe"
 module Spectrum
   class EventHandlers
     include Syringe
+    Syringe.injectable
 
-    def initialize(@listeners : Array(EventHandler))
+    def initialize(@handlers : Array(EventHandler))
     end
 
     def on_event(event : Event)
-      @listeners.each do |listener|
-        listener.on_event(event)
+      @handlers.each do |handler|
+        handler.on_event(event)
       end
     end
   end
