@@ -18,11 +18,11 @@ class FooBarOneEventHandler
   Syringe.injectable
 
   def self.last_event=(event : FooBarOneEvent)
-    @@event = event
+    @@eventFooBarOne = event
   end
 
   def self.last_event
-    @@event
+    @@eventFooBarOne
   end
 
   def on_event(event : FooBarOneEvent)
@@ -35,11 +35,11 @@ class FooBarTwoEventHandler
   Syringe.injectable
 
   def self.last_event=(event : FooBarTwoEvent)
-    @@event = event
+    @@eventFooBarTwo = event
   end
 
   def self.last_event
-    @@event
+    @@eventFooBarTwo
   end
 
   def on_event(event : FooBarTwoEvent)
@@ -52,11 +52,11 @@ class FooBarBothEventHandler
   Syringe.injectable
 
   def self.last_event=(event : Spectrum::Event)
-    @@event = event
+    @@eventFooBarBoth = event
   end
 
   def self.last_event
-    @@event
+    @@eventFooBarBoth
   end
 
   def on_event(event : FooBarOneEvent)
