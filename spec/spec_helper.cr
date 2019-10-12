@@ -3,13 +3,25 @@ require "../src/spectrum"
 
 class FooBarOneEvent
   include Spectrum::Event
+  getter :handlers
   def initialize(@id : Int32)
+    @handlers = [] of Spectrum::EventHandler
+  end
+
+  def store_handler(handler : Spectrum::EventHandler)
+    @handlers << handler
   end
 end
 
 class FooBarTwoEvent
   include Spectrum::Event
+  getter :handlers
   def initialize(@id : Int32)
+    @handlers = [] of Spectrum::EventHandler
+  end
+
+  def store_handler(handler : Spectrum::EventHandler)
+    @handlers << handler
   end
 end
 
@@ -17,16 +29,8 @@ class FooBarOneEventHandler
   include Spectrum::EventHandler
   Syringe.injectable
 
-  def self.last_event=(event : FooBarOneEvent)
-    @@eventFooBarOne = event
-  end
-
-  def self.last_event
-    @@eventFooBarOne
-  end
-
   def on_event(event : FooBarOneEvent)
-    self.class.last_event = event
+    event.store_handler(self)
   end
 end
 
@@ -34,16 +38,8 @@ class FooBarTwoEventHandler
   include Spectrum::EventHandler
   Syringe.injectable
 
-  def self.last_event=(event : FooBarTwoEvent)
-    @@eventFooBarTwo = event
-  end
-
-  def self.last_event
-    @@eventFooBarTwo
-  end
-
   def on_event(event : FooBarTwoEvent)
-    self.class.last_event = event
+    event.store_handler(self)
   end
 end
 
@@ -51,19 +47,11 @@ class FooBarBothEventHandler
   include Spectrum::EventHandler
   Syringe.injectable
 
-  def self.last_event=(event : Spectrum::Event)
-    @@eventFooBarBoth = event
-  end
-
-  def self.last_event
-    @@eventFooBarBoth
-  end
-
   def on_event(event : FooBarOneEvent)
-    self.class.last_event = event
+    event.store_handler(self)
   end
 
   def on_event(event : FooBarTwoEvent)
-    self.class.last_event = event
+    event.store_handler(self)
   end
 end

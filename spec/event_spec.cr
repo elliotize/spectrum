@@ -4,19 +4,15 @@ describe Spectrum do
   it "should have only events that are listening to an event recieve it" do
     event_one = FooBarOneEvent.new(id: 1)
     Spectrum.dispatch_sync_event(event_one)
-    FooBarOneEventHandler.last_event.should eq(event_one)
-    FooBarTwoEventHandler.last_event.should_not eq(event_one)
-    FooBarBothEventHandler.last_event.should eq(event_one)
+    event_one.handlers.size.should eq(2)
+
     event_two = FooBarTwoEvent.new(id: 2)
     Spectrum.dispatch_sync_event(event_two)
-    FooBarOneEventHandler.last_event.should_not eq(event_two)
-    FooBarTwoEventHandler.last_event.should eq(event_two)
-    FooBarBothEventHandler.last_event.should eq(event_two)
+    event_two.handlers.size.should eq(2)
+
     event_three = FooBarOneEvent.new(id: 3)
     Spectrum.dispatch_sync_event(event_three)
-    FooBarOneEventHandler.last_event.should eq(event_three)
-    FooBarTwoEventHandler.last_event.should_not eq(event_three)
-    FooBarBothEventHandler.last_event.should eq(event_three)
+    event_three.handlers.size.should eq(2)
   end
 
   it "async events should be triggered" do
@@ -25,23 +21,17 @@ describe Spectrum do
     Spectrum.dispatch_async_event(event_one, :test)
     while event_queue.busy?
     end
-    FooBarOneEventHandler.last_event.should eq(event_one)
-    FooBarTwoEventHandler.last_event.should_not eq(event_one)
-    FooBarBothEventHandler.last_event.should eq(event_one)
+    event_one.handlers.size.should eq(2)
     while event_queue.busy?
     end
     event_two = FooBarTwoEvent.new(id: 2)
     Spectrum.dispatch_async_event(event_two, :test)
-    FooBarOneEventHandler.last_event.should_not eq(event_two)
-    FooBarTwoEventHandler.last_event.should eq(event_two)
-    FooBarBothEventHandler.last_event.should eq(event_two)
+    event_two.handlers.size.should eq(2)
     while event_queue.busy?
     end
     event_three = FooBarOneEvent.new(id: 3)
     Spectrum.dispatch_async_event(event_three, :test)
-    FooBarOneEventHandler.last_event.should eq(event_three)
-    FooBarTwoEventHandler.last_event.should_not eq(event_three)
-    FooBarBothEventHandler.last_event.should eq(event_three)
+    event_three.handlers.size.should eq(2)
     EventQueue.stop(:test)
   end
 end
