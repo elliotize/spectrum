@@ -20,16 +20,19 @@ describe Spectrum do
     event_one = FooBarOneEvent.new(id: 1)
     Spectrum.dispatch_async_event(event_one, :test)
     puts "here"
+    sleep 10
     while event_queue.busy?
     end
     event_one.handlers.size.should eq(2)
     puts "here"
+    sleep 10
     while event_queue.busy?
     end
     event_two = FooBarTwoEvent.new(id: 2)
     Spectrum.dispatch_async_event(event_two, :test)
     event_two.handlers.size.should eq(2)
     puts "here"
+    sleep 10
     while event_queue.busy?
     end
     event_three = FooBarOneEvent.new(id: 3)
