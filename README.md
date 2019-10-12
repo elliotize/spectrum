@@ -64,10 +64,19 @@ class FooBarBothEventHandler
   end
 end
 
+## Sync event
 event_one = FooBarOneEvent.new(id: 1)
-Spectrum.dispatch_event(event_one)
+Spectrum.dispatch_sync_event(event_one)
 event_two = FooBarTwoEvent.new(id: 2)
-Spectrum.dispatch_event(event_two)
+Spectrum.dispatch_sync_event(event_two)
+
+## Async event
+Spectrum::EventQueue.start(:my_queue)
+event_one = FooBarOneEvent.new(id: 1)
+Spectrum.dispatch_async_event(event_one, :my_queue)
+event_two = FooBarTwoEvent.new(id: 2)
+Spectrum.dispatch_async_event(event_two, :my_queue)
+Spectrum::EventQueue.stop(:my_queue)
 ```
 
 ## Contributing

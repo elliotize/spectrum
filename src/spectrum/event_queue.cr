@@ -47,8 +47,6 @@ module Spectrum
       @state = :stopped
     end
 
-    # This is hinting that the fiber should be within a runner
-    # class
     def stop: self
       @state = :stopped
       if @fiber.is_a?(Fiber)
@@ -73,16 +71,12 @@ module Spectrum
       self
     end
 
-    def events_in_queue?: Bool
-      !@channel.empty?
-    end
-
     def processing_an_event?: Bool
       @runner_state == :running
     end
 
     def busy?: Bool
-      running? && events_in_queue? && processing_an_event?
+      running? && processing_an_event?
     end
   end
 end

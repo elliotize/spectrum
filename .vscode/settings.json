@@ -1,0 +1,5 @@
+{
+    "crystal-lang.implementations": true,
+    "crystal-lang.hover": true,
+    "crystal-lang.completion": true
+}
