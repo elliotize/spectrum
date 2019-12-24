@@ -48,12 +48,10 @@ class FooBarBothEventHandler
   Syringe.injectable
 
   def on_event(event : FooBarOneEvent)
-    puts event
     event.store_handler(self)
   end
 
   def on_event(event : FooBarTwoEvent)
-    puts event
     event.store_handler(self)
   end
 end
