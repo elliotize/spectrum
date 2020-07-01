@@ -87,3 +87,4 @@ Spectrum::EventQueue.stop(:my_queue)
 ## Contributors
 
 - [Tom Elliot](https://github.com/elliotize) - creator and maintainer
+
