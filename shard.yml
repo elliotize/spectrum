@@ -9,6 +9,6 @@ crystal: 0.35.1
 dependencies:
   syringe:
     github: elliotize/syringe
-    branch: 0.2.0
+    tag: 0.2.0
 
 license: MIT
