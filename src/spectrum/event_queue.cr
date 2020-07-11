@@ -7,12 +7,6 @@ class Channel(T)
       raise "Channel does not have a queue."
     end
   end
-
-  def sync
-    @lock.sync do
-      yield
-    end
-  end
 end
 
 module Spectrum
