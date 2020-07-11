@@ -74,6 +74,13 @@ Spectrum.dispatch_async_event(event_one, :my_queue)
 event_two = FooBarTwoEvent.new(id: 2)
 Spectrum.dispatch_async_event(event_two, :my_queue)
 Spectrum::EventQueue.stop(:my_queue)
+
+## Advanced Queue Settings
+Spectrum::EventQueue.start(
+  name: :my_queue,
+  number_of_workers: 10
+  queue_size: 10
+)
 ```
 
 ## Contributing

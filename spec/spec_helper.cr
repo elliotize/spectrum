@@ -55,3 +55,31 @@ class FooBarBothEventHandler
     event.store_handler(self)
   end
 end
+
+class LockEvent
+  include Spectrum::Event
+  getter :lock
+  def initialize
+    @lock = false
+  end
+
+  def lock!
+    @lock = true
+  end
+
+  def unlock!
+    @lock = false
+  end
+end
+
+class LockEventHandler
+  include Spectrum::EventHandler
+  Syringe.injectable
+
+  def on_event(event : LockEvent)
+    event.lock!
+    while event.lock
+      Fiber.yield
+    end
+  end
+end
