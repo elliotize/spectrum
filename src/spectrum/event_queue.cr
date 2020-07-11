@@ -1,12 +1,27 @@
+# Monkey Patch to check if channel queue is full
+class Channel(T)
+  def queue_full? : Bool
+    if @queue
+      @queue.as(Deque(T)).size == @capacity
+    else
+      raise "Channel does not have a queue."
+    end
+  end
+
+  def sync
+    @lock.sync do
+      yield
+    end
+  end
+end
+
 module Spectrum
   class EventQueue
-    include Syringe
-
     @@event_queues = {} of Symbol => self
-    @fiber : Fiber | Nil
 
-    def self.start(name : Symbol) : self | Nil
-      @@event_queues[name] = self.new
+    def self.start(name : Symbol, number_of_workers : Int32 = 1, queue_size : Int32 = 1000, queue_timeout : Int32 = 30) : self | Nil
+      event_handlers = EventHandlers.new
+      @@event_queues[name] = self.new(event_handlers, number_of_workers, queue_size, queue_timeout)
       @@event_queues[name].start
       @@event_queues[name]
     end
@@ -26,15 +41,23 @@ module Spectrum
       raise "Event Queue #{name} not created"
     end
 
-    def initialize(event_handlers : EventHandlers)
-      @event_handlers = event_handlers
-      @channel = Channel(Event).new
+    def initialize(@event_handlers : EventHandlers, @number_of_workers : Int32, queue_size : Int32, @queue_timeout : Int32)
+      @queue = [] of Event
+      @workers = [] of Fiber
+
+      @channel = Channel(Event).new(queue_size)
       @state = :stopped
-      @runner_state = :not_running
-      @fiber = nil
     end
 
     def send(event : Event): self
+      current_time = Time.utc.to_unix
+      while @channel.queue_full? && (Time.utc.to_unix - current_time) < @queue_timeout
+        Fiber.yield
+      end
+      if @channel.queue_full?
+        raise FullException.new("Channel queue of size #{@queue_timeout} is full after timeout of #{@queue_timeout}")
+      end
+
       @channel.send(event)
       self
     end
@@ -44,39 +67,48 @@ module Spectrum
     end
 
     def stopped?: Bool
-      @state = :stopped
+      @state == :stopped
     end
 
     def stop: self
-      @state = :stopped
-      if @fiber.is_a?(Fiber)
-        while @fiber.as(Fiber).running?
-        end
-        self
-      else
-        raise "This queue was never started" 
+      @channel.close
+      while workers_not_dead?
+        Fiber.yield
       end
+      @state = :stopped
+
+      self
     end
 
     def start: self
       @state = :running
-      @fiber = spawn do
-        while running?
-          event = @channel.receive
-          @runner_state = :running
-          @event_handlers.on_event(event)
-          @runner_state = :not_running
+
+      @workers << spawn do
+        begin
+          while !@channel.closed?
+            event = @channel.receive
+            @event_handlers.on_event(event)
+          end
+        rescue Channel::ClosedError
         end
       end
       self
     end
 
-    def processing_an_event?: Bool
-      @runner_state == :running
+    def workers_running?: Bool
+      @workers.any? { |w| w.running? }
     end
 
-    def busy?: Bool
-      running? && processing_an_event?
+    def workers_not_dead?: Bool
+      @workers.any? { |w| !w.dead? }
+    end
+
+    def something?: Bool
+      @workers.any? { |w| !w.resumable? }
+    end
+
+    class FullException < Exception
+
     end
   end
 end

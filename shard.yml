@@ -1,5 +1,5 @@
 name: spectrum
-version: 0.1.0
+version: 0.2.0
 
 authors:
   - Tom Elliot <telliot16@gmail.com>
@@ -9,6 +9,6 @@ crystal: 0.35.1
 dependencies:
   syringe:
     github: elliotize/syringe
-    tag: 0.2.0
+    version: ~> 0.2.1
 
 license: MIT
